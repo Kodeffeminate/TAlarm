@@ -7,7 +7,10 @@
 </head>
 <body>
 <form id="redline">
-FROM <select id="fromOptions">
+FROM<br><select id="fromOptions">
+</select>
+<br>
+TO<br><select id="toOptions">
 </select>
 </form>
 <script type="text/javascript">
@@ -16,18 +19,25 @@ alert('REDLINE');
 $.getJSON("http://realtime.mbta.com/developer/api/v2/stopsbyroute?api_key=wX9NwuHnZU2ToO7GmGR9uw&route=931_&format=json",
 function(data) {
 	var direction = data.direction;
-	var options =[];
-	for(var i in direction){
-		var stops = direction[i].stop;
-		for(var j in stops){
-			var stopNames = stops[j].stop_name;
-			//alert(stopNames);
-			options.push('<option value="',stopNames,'">',
-			stopNames, '</option>');
-		}
-		$('#fromOptions').html(options.join(''));
-}
-
+	var fromOptions =[];
+	var toOptions =[];
+	var fromStops = direction[0].stop;
+	var toStops = direction[1].stop;
+	for(var j in fromStops){
+		var stopNames = fromStops[j].stop_name;
+		//alert(stopNames);
+		fromOptions.push('<option value="',stopNames,'">',
+		stopNames, '</option>');
+	}
+	$('#fromOptions').html(fromOptions.join(''));
+	
+	for(var k in toStops){
+		var stopNames = toStops[k].stop_name;
+		//alert(stopNames);
+		toOptions.push('<option value="',stopNames,'">',
+		stopNames, '</option>');
+	}
+	$('#toOptions').html(toOptions.join(''));
 });
 });
 
