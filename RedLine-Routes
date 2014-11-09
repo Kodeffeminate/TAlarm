@@ -7,23 +7,26 @@
 </head>
 <body>
 <form id="redline">
-FROM <select>
-<option id="opt0" value="None" selected="Selected"> </option>
-<option id="opt1"> </option>
+FROM <select id="fromOptions">
 </select>
 </form>
 <script type="text/javascript">
 $(document).ready(function(){
 alert('REDLINE');
-$.getJSON("http://realtime.mbta.com/developer/api/v2/routes?api_key=wX9NwuHnZU2ToO7GmGR9uw&format=json",
+$.getJSON("http://realtime.mbta.com/developer/api/v2/stopsbyroute?api_key=wX9NwuHnZU2ToO7GmGR9uw&route=931_&format=json",
 function(data) {
-	alert(data.mode);
-    // var example = JSON.parse(data);
-	//alert(example.mode.mode_name);
-	//var line = data.mode.route.route_id='933_'.route_name='Red Line';
-	var modes = data['mode'.'mode_name'];
-	$.each(modes.route.route_id);
-  $('select').append(line);
+	var direction = data.direction;
+	var options =[];
+	for(var i in direction){
+		var stops = direction[i].stop;
+		for(var j in stops){
+			var stopNames = stops[j].stop_name;
+			//alert(stopNames);
+			options.push('<option value="',stopNames,'">',
+			stopNames, '</option>');
+		}
+		$('#fromOptions').html(options.join(''));
+}
 
 });
 });
