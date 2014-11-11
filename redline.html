@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="populateNearestStops.js"></script>
+<style>
+td   {color:white}
+p    {color:white}
+</style>
+
+</head>
+<body bgcolor="black">
+<svg width="100%" height="20%">
+  <rect width="100%" height="20%" style="fill:red;stroke-width:3;stroke:rgb(0,0,0)" />
+</svg><br>
+<table align="center">
+<tr>
+<td colspan=2>Send me an alarm</td>
+</tr>
+<tr>
+<td>when</td>
+<td><select><option>10 minutes before<option>15 minutes before<option>30 minutes before</select></td>
+</tr>
+<tr>
+<td>going to</td>
+<td><select id="toStops"><option>Alewife<option>Braintree<option>Ashmont</select></td>
+</tr>
+<tr>
+<td>from</td>
+<td><select id="fromStops"><option>Downtown Crossing<option>select<option>South Station</select></td>
+</tr>
+<tr></tr><tr></tr>
+<tr>
+<td colspan=2 align="right"><button onclick="showPosition()">Skip</button></td>
+</tr>
+</table><br>
+
+<p id="text1">Hello!!</p>
+<script>
+function clickme() 
+{
+	var x = document.getElementById("text1");
+
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition);
+		} else { 
+			x.innerHTML = "Geolocation is not supported by this browser.";
+		}
+}
+function showPosition() {
+    x.innerHTML = "Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude;	
+}
+</script>
+</body>
+</html>
