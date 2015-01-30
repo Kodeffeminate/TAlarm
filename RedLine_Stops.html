@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>RedLine</title>
+<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/getSchedule.js"></script>
+<link REL="StyleSheet" TYPE="text/css" HREF="Lines.css"> 
+</head>
+<body id="outerBody">
+<table id="header">
+<tr><td align='center'><b>RED LINE</b><td></tr>
+</table>
+<svg width="100%" height="20%">
+<rect width="100%" height="15%" style="fill:red;stroke-width:3;stroke:rgb(0,0,0)" />
+</svg>
+<form id='lines' onsubmit='getStopInfo(this)' method='GET'>
+<fieldSet>
+<legend>STOP INFO:</legend>
+FROM<br><select id="fromOptions" name="fromStop">
+</select>
+<br>
+TO<br><select id="toOptions" name="toStop">
+</select>
+<p>
+<input type="submit" value="Submit">
+</p>
+</fieldSet>
+</form>
+<script type="text/javascript">
+
+$(document).ready(getStopDetails(this.document,window.jQuery));
+
+</script>
+</body>
+</html>
