@@ -1,18 +1,33 @@
 //GLOBAL VARIABLE
 //Map to store the stopId of a given stop name
 var stopIdByNameMap = new Object();
-
 function getStopInfo(form) {
     var fromStop = form.fromStop.value;
-    alert ("You typed: " + fromStop);
 	var toStop = form.toStop.value;
-	var stopId = stopIdByNameMap[toStop];
-	alert(stopId);
+	var stopId = stopIdByNameMap[fromStop];
 	//70094
 	var url = "http://realtime.mbta.com/developer/api/v2/schedulebystop?api_key=wX9NwuHnZU2ToO7GmGR9uw&stop="+stopId+"&route=931_&format=json";
-$.getJSON(url,function(data){
-	
+	var startTag="<TABLE id='mainTable'><TBODY><TR><TD style=\"WIDTH: 120px\">S.No</TD><TD style=\"WIDTH: 120px\">TRIP NAME ID</TD><TD style=\"WIDTH: 120px\">SCHEDULED ARRIVAL</TD></TR>";
+	var endTag="</TBODY></TABLE>";
+	var newTable=startTag;
+$.getJSON(url,function(result){
+	var tripInfo = result.mode[0].route[0].direction[0].trip;
+	newTable+="<TR><TD>";
+	for(var i in tripInfo){
+		var tripName = tripInfo[i].trip_name;
+		var arrivalEpochTime = tripInfo[i].sch_arr_dt;
+		var arrivalTime = new Date(arrivalEpochTime);
+		newTable+=i;
+		newTable+="</TD><TD>";
+		newTable+=tripName;
+		newTable+="</TD><TD>";
+		newTable+=arrivalTime;
+		newTable+="</TD></TR>";
+	}
+	newTable+=endTag;	
 });
+alert("Done");
+$('#content').html(newTable)
 }
 
 function getStopDetails(document,$){
@@ -41,6 +56,9 @@ function(data) {
 		stopName, '</option>');
 	}
 	$('#toOptions').html(toOptions.join(''));
+	document.preventDefault();
 	
 });
 }
+
+
