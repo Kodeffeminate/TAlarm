@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <title>RedLine</title>
-<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript" src="js/getSchedule.js"></script>
 <link REL="StyleSheet" TYPE="text/css" HREF="Lines.css"> 
+
 </head>
 <body id="outerBody">
 <table id="header">
@@ -14,7 +15,8 @@
 <svg width="100%" height="20%">
 <rect width="100%" height="15%" style="fill:red;stroke-width:3;stroke:rgb(0,0,0)" />
 </svg>
-<form id='lines' onsubmit='getStopInfo(this)' method='GET'>
+<div id="wrapper">
+<form id='lines' method='GET'>
 <fieldSet>
 <legend>STOP INFO:</legend>
 FROM<br><select id="fromOptions" name="fromStop">
@@ -27,10 +29,45 @@ TO<br><select id="toOptions" name="toStop">
 </p>
 </fieldSet>
 </form>
+</div>
+<div id='content'></div>
+
 <script type="text/javascript">
-
 $(document).ready(getStopDetails(this.document,window.jQuery));
-
+$(document).ready(function()
+{
+	$("#lines").submit(function(event)
+	{
+		var fromStop = this.fromStop.value;
+		var toStop = this.toStop.value;
+		alert(toStop);
+		var stopId = stopIdByNameMap[fromStop];
+		//70094
+		var url = "http://realtime.mbta.com/developer/api/v2/schedulebystop?api_key=wX9NwuHnZU2ToO7GmGR9uw&stop="+stopId+"&route=Red&format=json";
+		var startTag="<TABLE id='mainTable'  cellspacing=\"20\"><TBODY><TR><TD style=\"WIDTH: 200px\">S.No</TD><br><br><TD style=\"WIDTH: 200px\">TRIPNAME</TD><br><br><TD style=\"WIDTH: 200px\">ARRIVAL</TD></TR>";
+		var endTag="</TBODY></TABLE>";
+		var newTable=startTag;
+		$.getJSON(url,function(result)
+		{
+			var tripInfo = result.mode[0].route[0].direction[0].trip;
+			var tableRows="";
+			for(var i in tripInfo){
+				var tripName = tripInfo[i].trip_name;
+				var arrivalEpochTime = tripInfo[i].sch_arr_dt;
+				var arrivalTime = new Date(arrivalEpochTime * 1000);
+				var row ="<TR><TD style=\"WIDTH: 200px\">"+i+"</TD><br><br><TD style=\"WIDTH: 200px\">"+tripName+"</TD><br><br><TD style=\"WIDTH: 200px\">"+arrivalTime+"</TD></TR>";
+				$(newTable).append(row);
+				//tableRows+=row;
+			}
+			//newTable+=tableRows;	
+			$(newTable).append(endTag);
+			//newTable+=endTag;				
+		}
+	);
+	$('#lines').hide();
+	//event.preventDefault();
+	}); 
+});
 </script>
 </body>
 </html>
